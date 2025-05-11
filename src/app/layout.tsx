@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import QueryProvider from "@/providers/query-provider";
+import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "Flow Scrape - Web Scraping Made Easy",
   description:
@@ -20,7 +22,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${geist.variable}`}>
-        <body>{children}</body>
+        <body>
+          <QueryProvider>{children}</QueryProvider>
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );

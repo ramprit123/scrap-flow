@@ -1,10 +1,11 @@
+"use client";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { waitFor } from "@/lib/waitFor";
-import { getWorkflowsForUser } from "actions/workflows/getWorkflowsForUser";
+import { useWorkflows } from "@/hooks/use-workflows";
 import { AlertCircleIcon, FolderIcon } from "lucide-react";
-import React, { Suspense } from "react";
+import { CreateWorkflowDialog } from "./_components/CreateWorkflowDialog";
 
 const Workflows = () => {
   return (
@@ -17,13 +18,11 @@ const Workflows = () => {
           </p>
         </div>
         <div className="flex items-center">
-          <Button className="btn btn-primary">Create Workflow</Button>
+          <CreateWorkflowDialog />
         </div>
       </div>
       <div className="h-full">
-        <Suspense fallback={<UserWorkFlowsSkelton />}>
-          <UserWorkFlows />
-        </Suspense>
+        <UserWorkFlows />
       </div>
     </div>
   );
@@ -39,9 +38,14 @@ function UserWorkFlowsSkelton() {
   );
 }
 
-async function UserWorkFlows() {
-  const workflows = await getWorkflowsForUser();
-  if (!workflows) {
+function UserWorkFlows() {
+  const { data: workflows, isError, isLoading } = useWorkflows();
+
+  if (isLoading) {
+    return <UserWorkFlowsSkelton />;
+  }
+
+  if (isError) {
     return (
       <Alert>
         <AlertCircleIcon className="text-warning h-6 w-6" />
@@ -53,7 +57,7 @@ async function UserWorkFlows() {
     );
   }
 
-  if (workflows.length === 0) {
+  if (workflows?.length === 0) {
     return (
       <div className="flex h-[400px] flex-col items-center justify-center gap-4">
         <div className="flex max-w-md flex-col items-center gap-2 text-center">
@@ -65,7 +69,7 @@ async function UserWorkFlows() {
             Get started by creating your first workflow to automate your tasks.
           </p>
         </div>
-        <Button className="mt-4">Create Your First Workflow</Button>
+        <CreateWorkflowDialog />
       </div>
     );
   }
