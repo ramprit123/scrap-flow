@@ -39,13 +39,19 @@ export const CreateWorkflowDialog = () => {
 
   const createWorkflow = useCreateWorkflow();
 
+  const queryClient = useQueryClient();
+
   const onSubmit = (data: CreateWorkflowType) => {
     toast.loading("Creating workflow...", { id: `create-workflow` });
     createWorkflow.mutate(data, {
       onSuccess: () => {
         setOpen(false);
         reset();
-        toast.success("Workflow created successfully", { id: `create-workflow` });
+        // Invalidate workflows query to refetch latest data
+        queryClient.invalidateQueries({ queryKey: ["workflows"] });
+        toast.success("Workflow created successfully", {
+          id: `create-workflow`,
+        });
       },
       onError: (error) => {
         toast.error("Failed to create workflow", { id: `create-workflow` });

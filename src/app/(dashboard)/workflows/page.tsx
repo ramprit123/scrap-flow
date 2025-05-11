@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useWorkflows } from "@/hooks/use-workflows";
 import { AlertCircleIcon, FolderIcon } from "lucide-react";
 import { CreateWorkflowDialog } from "./_components/CreateWorkflowDialog";
+import { WorkFlowCard } from "./_components/WorkflowCard";
 
 const Workflows = () => {
   return (
@@ -30,9 +31,9 @@ const Workflows = () => {
 
 function UserWorkFlowsSkelton() {
   return (
-    <div className="space-y-2">
+    <div className="grid grid-cols-4 gap-4">
       {[1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} className="h-32 w-full rounded-md" />
+        <Skeleton key={i} className="h-28 w-full animate-pulse rounded-md" />
       ))}
     </div>
   );
@@ -76,7 +77,11 @@ function UserWorkFlows() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4"></div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+        {workflows?.map((workflow) => (
+          <WorkFlowCard key={workflow.workflowId} workflow={workflow} />
+        ))}
+      </div>
     </div>
   );
 }
