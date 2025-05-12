@@ -31,7 +31,7 @@ const Workflows = () => {
 
 function UserWorkFlowsSkelton() {
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
       {[1, 2, 3, 4].map((i) => (
         <Skeleton key={i} className="h-28 w-full animate-pulse rounded-md" />
       ))}
